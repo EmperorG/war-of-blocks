@@ -63,7 +63,7 @@ minetest.register_tool("default:pickaxe", {
 		full_punch_interval = 1.0,
 		max_drop_level=0,
 		groupcaps = {
-			fleshy={times={[1]=0.01} ,uses=0, maxlevel=1},
+			dig={times={[1]=0.01} ,uses=0, maxlevel=1},
 		}
         } 
 })
@@ -75,7 +75,7 @@ minetest.register_node("default:block", {
 	description = "Block",
 	tiles ={"block.png"},
 	is_ground_conect = true,
-	groups = {fleshy=1}
+	groups = {dig=1}
 })
 
 -- Aliases for the map generator outputs
@@ -84,7 +84,7 @@ minetest.register_alias("mapgen_air", "air")
 minetest.register_alias("mapgen_block", "block")
 
 -- Global callbacks
---
+
 
 -- Global environment step function
 function on_step(dtime)
