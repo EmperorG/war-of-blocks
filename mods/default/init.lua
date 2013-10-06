@@ -75,13 +75,15 @@ minetest.register_node("default:block", {
 	description = "Block",
 	tiles ={"block.png"},
 	is_ground_conect = true,
-	groups = {dig=1}
+	groups = {dig=1},
+	drop = 'default:block',
+	
 })
 
 -- Aliases for the map generator outputs
 
 minetest.register_alias("mapgen_air", "air")
-minetest.register_alias("mapgen_block", "block")
+minetest.register_alias("mapgen_block", "default:block")
 
 -- Global callbacks
 

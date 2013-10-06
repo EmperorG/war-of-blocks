@@ -1,1 +1,1 @@
-minetest.register_alias("mapgen_block", "block")
+minetest.register_alias("mapgen_block", "default:block")
