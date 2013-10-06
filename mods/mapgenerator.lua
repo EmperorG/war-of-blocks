@@ -1,0 +1,1 @@
+minetest.register_alias("mapgen_block", "block")
