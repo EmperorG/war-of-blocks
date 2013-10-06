@@ -14,10 +14,8 @@ end)
 
 -- weapons
 
--- sniper rifle
-
-minetest.register_item("sniper_rifle", {
-	description = "Sniper rifle",
+minetest.register_tool("default:sniper_rifle", {
+	description = "Sniper_rifle",
 	inventory_image = "sniper_rifle.png",
 	tool_capabilities = {
 		max_drop_level=0,
@@ -26,7 +24,7 @@ minetest.register_item("sniper_rifle", {
 
 -- machinegun
 
-minetest.register_item("machinegun", {
+minetest.register_tool("default:machinegun", {
         description = "Machinegun",
         inventory_image = "machinegun.png",
         tool_capabilities = {
@@ -36,7 +34,7 @@ minetest.register_item("machinegun", {
 
 -- handgun
 
-minetest.register_item("handgun", {  
+minetest.register_tool("default:handgun", {  
         description = "Handgun",  
         inventory_image = "handgun.png",  
         tool_capabilities = {
@@ -46,7 +44,7 @@ minetest.register_item("handgun", {
 
 -- rocketlauncher
 
-minetest.register_item("rocketlauncher", {
+minetest.register_tool("default:rocketlauncher", {
         description = "Rockerlauncher",  
         inventory_image = "rocketlauncher.png",
         tool_capabilities = {
@@ -56,14 +54,14 @@ minetest.register_item("rocketlauncher", {
 
 -- pickaxe
 
-minetest.register_item("pickaxe", {
+minetest.register_tool("default:pickaxe", {
         description = "pickaxe",
         inventory_image = "pickaxe.png",
         tool_capabilities = {
 		full_punch_interval = 1.0,
                 max_drop_level=0,
 		groupcaps = {
-			digable={times={[0]=0.00 ,uses=0, maxlevel=1}
+			digable={times={[0]=0.00 ,uses=0, maxlevel=1}}
 		}
         } 
 })
@@ -76,7 +74,7 @@ minetest.register_node("block", {
 	tiles ={"block.png"},
 	is_ground_conect = true,
 	groups = {digable=0}
-			
+})
 
 -- Aliases for the map generator outputs
 
