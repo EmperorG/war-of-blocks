@@ -1,1 +1,0 @@
-minetest.register_alias("mapgen_block", "default:block")

@@ -2,7 +2,7 @@ LIGHT_MAX = 14
 
 default = {}
 
-dofile(minetest.get_modpath("default").."/mapgenerator.lua")
+dofile(minetest.get_modpath("default").."/mapgen.lua")
 
 minetest.register_on_joinplayer(function(player)
 	local cb = function(player)
@@ -83,7 +83,27 @@ minetest.register_node("default:block", {
 -- Aliases for the map generator outputs
 
 minetest.register_alias("mapgen_air", "air")
-minetest.register_alias("mapgen_block", "default:block")
+minetest.register_alias("mapgen_stone", "default:block")
+minetest.register_alias("mapgen_tree", "default:block")
+minetest.register_alias("mapgen_leaves", "default:block")
+minetest.register_alias("mapgen_apple", "default:block")
+minetest.register_alias("mapgen_water_source", "default:block")
+minetest.register_alias("mapgen_dirt", "default:block")
+minetest.register_alias("mapgen_sand", "default:block")
+minetest.register_alias("mapgen_gravel", "default:block")
+minetest.register_alias("mapgen_clay", "default:block")
+minetest.register_alias("mapgen_lava_source", "default:block")
+minetest.register_alias("mapgen_cobble", "default:block")
+minetest.register_alias("mapgen_mossycobble", "default:block")
+minetest.register_alias("mapgen_dirt_with_grass", "default:block")
+minetest.register_alias("mapgen_junglegrass", "default:block")
+minetest.register_alias("mapgen_stone_with_coal", "default:block")
+minetest.register_alias("mapgen_stone_with_iron", "default:block")
+minetest.register_alias("mapgen_mese", "default:block")
+minetest.register_alias("mapgen_stair_cobble", "default:block")
+
+
+
 
 -- Global callbacks
 
