@@ -2,7 +2,7 @@ LIGHT_MAX = 14
 
 default = {}
 
-dofile(minetest.get_modpath("/mapgenerator.lua")
+dofile(minetest.get_modpath("default").."/mapgenerator.lua")
 
 minetest.register_on_joinplayer(function(player)
 	local cb = function(player)
