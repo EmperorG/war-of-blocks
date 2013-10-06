@@ -14,6 +14,8 @@ end)
 
 -- weapons
 
+-- sniper rifle
+
 minetest.register_tool("default:sniper_rifle", {
 	description = "Sniper_rifle",
 	inventory_image = "sniper_rifle.png",
