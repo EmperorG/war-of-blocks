@@ -61,17 +61,17 @@ minetest.register_tool("default:pickaxe", {
         inventory_image = "pickaxe.png",
         tool_capabilities = {
 		full_punch_interval = 1.0,
-                max_drop_level=0,
-		groupcaps = {
-			digable={times={[0]=0.00 ,uses=0, maxlevel=1}}
-		}
+		max_drop_level=0,
+--		groupcaps = {
+--			digable={times={[0]=0.00 ,uses=0, maxlevel=1}}
+--		}
         } 
 })
 
 
 -- Blocks
 
-minetest.register_node("block", {
+minetest.register_node("default:block", {
 	description = "Block",
 	tiles ={"block.png"},
 	is_ground_conect = true,
