@@ -12,15 +12,15 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 BULLET_DAMAGE=5
-BULLET_VELOCITY=19
-BULLET_GRAVETY=0.000001
+BULLET_VELOCITY=500
+BULLET_GRAVETY=1
 
 default_shoot_bullet=function (item, player, pointed_thing)
         -- Check if blocks in Inventory and remove one of them
         local i=1
         if player:get_inventory():contains_item("main", "default:block") then
                 player:get_inventory():remove_item("main", "default:block")
-                -- Shoot Arrow
+                -- Shoot Buller
                 local playerpos=player:getpos()
                 local obj=minetest.env:add_entity({x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, "default:bullet_entity")
                 local dir=player:get_look_dir()
@@ -73,6 +73,68 @@ end
 
 minetest.register_entity("default:bullet_entity", DEFAULT_BULLET_ENTITY)
 
+S_BULLET_DAMAGE=15
+S_BULLET_VELOCITY=700
+S_BULLET_GRAVETY=1
+
+default_shoot_s_bullet=function (item, player, pointed_thing)
+        -- Check if blocks in Inventory and remove one of them
+        local i=3
+        if player:get_inventory():contains_item("main", "default:s_block") then
+                player:get_inventory():remove_item("main", "default:s_block")
+                -- Shoot S_Bullet
+                local playerpos=player:getpos()
+                local obj=minetest.env:add_entity({x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, "default:s_bullet_entity")
+                local dir=player:get_look_dir()
+                obj:setvelocity({x=dir.x*S_BULLET_VELOCITY, y=dir.y*S_BULLET_VELOCITY, z=dir.z*S_BULLET_VELOCITY})
+                obj:setacceleration({x=dir.x*-3, y=-S_BULLET_GRAVETY, z=dir.z*-3})
+        end
+        return
+end
+
+-- The S_Bullet Entity
+
+DEFAULT_S_BULLET_ENTITY={
+        physical = false,
+        timer=0,
+        textures = {"bullet.png"},
+        lastpos={},
+        collisionbox = {0,0,0,0,0,0},
+}
+
+
+-- S_Bullet_entity.on_step()--> called when bullet is moving
+DEFAULT_S_BULLET_ENTITY.on_step = function(self, dtime)
+        self.timer=self.timer+dtime
+        local pos = self.object:getpos()
+        local node = minetest.env:get_node(pos)
+
+        -- When s_bullet is away from player (after 50 seconds): Cause damage to mobs and players
+        if self.timer>50 then
+                local objs = minetest.env:get_objects_inside_radius({x=pos.x,y=pos.y,z=pos.z}, 2)
+                for k, obj in pairs(objs) do
+                        obj:set_hp(obj:get_hp()-S_BULLET_DAMAGE)
+                        if obj:get_entity_name() ~= "default:s_bullet_entity" then
+                                if obj:get_hp()<=0 then
+                                        obj:remove()
+                                end
+                                self.object:remove()
+                        end
+                end
+        end
+
+        -- Become item when hitting a node
+        if self.lastpos.x~=nil then --If there is no lastpos for some reason
+                if node.name ~= "air" then
+                        minetest.env:add_item(self.lastpos, 'craft "default:s_bullet" 1')
+                        self.object:remove()
+                end
+        end
+        self.lastpos={x=pos.x, y=pos.y, z=pos.z} -- Set lastpos-->Item will be added at last pos outside the node
+end
+
+minetest.register_entity("default:s_bullet_entity", DEFAULT_S_BULLET_ENTITY)
+
 -- weapons
 
 -- sniper rifle
@@ -80,8 +142,10 @@ minetest.register_entity("default:bullet_entity", DEFAULT_BULLET_ENTITY)
 minetest.register_tool("default:sniper_rifle", {
 	description = "Sniper rifle",
 	inventory_image = "sniper_rifle.png",
+	on_use = default_shoot_s_bullet,
 	tool_capabilities = {
 		max_drop_level=0,
+		full_punch_interval = 20,
 	}
 })
 
@@ -142,6 +206,15 @@ minetest.register_node("default:block", {
 
 })
 
+minetest.register_node("default:s_block", {
+        description = "S_Block",
+        tiles ={"s_block.png"},
+        is_ground_conect = true, 
+        groups = {dig=1},
+        drop = 'default:s_block',
+
+})
+
 minetest.register_node("default:leaveblock", {
         description = "Leave-Block",
         tiles ={"leaveblock.png"},
@@ -158,6 +231,19 @@ minetest.register_node("default:woodblock", {
         drop = 'default:block',
 
 })
+
+--Craft S_Block
+
+minetest.register_craft({
+        output = 'craft "default:s_block" 1',
+        recipe = {
+                {"default:block"},
+                {"default:block"},
+		{"default:block"},
+	}  
+})
+
+
 
 -- Aliases for the map generator outputs
 
