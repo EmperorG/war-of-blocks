@@ -80,12 +80,29 @@ minetest.register_node("default:block", {
 	
 })
 
+minetest.register_node("default:leaveblock", {
+        description = "Leave-Block",
+        tiles ={"leave-block.png"},
+        is_ground_conect = true,
+        groups = {dig=1},
+        drop = 'default:leaveblock',
+  
+})
+minetest.register_node("default:woodblock", {
+        description = "Wood-Block",
+        tiles ={"wood-block.png"}, 
+        is_ground_conect = true,
+        groups = {dig=1},
+        drop = 'default:woodblock',
+  
+})
+
 -- Aliases for the map generator outputs
 
 minetest.register_alias("mapgen_air", "air")
 minetest.register_alias("mapgen_stone", "default:block")
-minetest.register_alias("mapgen_tree", "default:air")
-minetest.register_alias("mapgen_leaves", "default:air")
+minetest.register_alias("mapgen_tree", "default:woodblock")
+minetest.register_alias("mapgen_leaves", "default:leaveblock")
 minetest.register_alias("mapgen_apple", "default:air")
 minetest.register_alias("mapgen_water_source", "default:block")
 minetest.register_alias("mapgen_dirt", "default:block")
