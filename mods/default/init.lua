@@ -82,7 +82,7 @@ minetest.register_node("default:block", {
 
 minetest.register_node("default:leaveblock", {
         description = "Leave-Block",
-        tiles ={"leave-block.png"},
+        tiles ={"leaveblock.png"},
         is_ground_conect = true,
         groups = {dig=1},
         drop = 'default:leaveblock',
@@ -90,7 +90,7 @@ minetest.register_node("default:leaveblock", {
 })
 minetest.register_node("default:woodblock", {
         description = "Wood-Block",
-        tiles ={"wood-block.png"}, 
+        tiles ={"woodblock.png"}, 
         is_ground_conect = true,
         groups = {dig=1},
         drop = 'default:woodblock',
