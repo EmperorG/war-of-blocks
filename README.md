@@ -1,4 +1,4 @@
 war-of-blocks
 =============
 
-War of Blocks, a game with weapons, based on the Minetest-engine
+War of Blocks, a free and open source Ace of Spades clone.
