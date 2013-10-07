@@ -1,5 +1,6 @@
 minetest.register_on_newplayer(function(player)
 	player:get_inventory():add_item('main', 'default:pickaxe')
+	player:get_inventory():add_item('main', 'default:machinegun')
 	player:get_inventory():add_item('main', 'default:sniper_rifle')
 	player:get_inventory():add_item('main', 'default:rocketlauncher')
 	player:get_inventory():add_item('main', 'default:handgun')
