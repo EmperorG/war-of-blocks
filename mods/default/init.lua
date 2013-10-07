@@ -17,7 +17,7 @@ end)
 -- sniper rifle
 
 minetest.register_tool("default:sniper_rifle", {
-	description = "Sniper_rifle",
+	description = "Sniper rifle",
 	inventory_image = "sniper_rifle.png",
 	tool_capabilities = {
 		max_drop_level=0,
@@ -57,13 +57,13 @@ minetest.register_tool("default:rocketlauncher", {
 -- pickaxe
 
 minetest.register_tool("default:pickaxe", {
-        description = "pickaxe",
+        description = "Pickaxe",
         inventory_image = "pickaxe.png",
         tool_capabilities = {
 		full_punch_interval = 1.0,
-		max_drop_level=0,
+		max_drop_level=1,
 		groupcaps = {
-			dig={times={[1]=0.01} ,uses=0, maxlevel=1},
+			dig={times={[1]=0.0} ,uses=0, maxlevel=1},
 		}
         } 
 })
@@ -84,9 +84,9 @@ minetest.register_node("default:block", {
 
 minetest.register_alias("mapgen_air", "air")
 minetest.register_alias("mapgen_stone", "default:block")
-minetest.register_alias("mapgen_tree", "default:block")
-minetest.register_alias("mapgen_leaves", "default:block")
-minetest.register_alias("mapgen_apple", "default:block")
+minetest.register_alias("mapgen_tree", "default:air")
+minetest.register_alias("mapgen_leaves", "default:air")
+minetest.register_alias("mapgen_apple", "default:air")
 minetest.register_alias("mapgen_water_source", "default:block")
 minetest.register_alias("mapgen_dirt", "default:block")
 minetest.register_alias("mapgen_sand", "default:block")
@@ -96,7 +96,7 @@ minetest.register_alias("mapgen_lava_source", "default:block")
 minetest.register_alias("mapgen_cobble", "default:block")
 minetest.register_alias("mapgen_mossycobble", "default:block")
 minetest.register_alias("mapgen_dirt_with_grass", "default:block")
-minetest.register_alias("mapgen_junglegrass", "default:block")
+minetest.register_alias("mapgen_junglegrass", "default:air")
 minetest.register_alias("mapgen_stone_with_coal", "default:block")
 minetest.register_alias("mapgen_stone_with_iron", "default:block")
 minetest.register_alias("mapgen_mese", "default:block")
