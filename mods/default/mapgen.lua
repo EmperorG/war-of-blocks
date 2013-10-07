@@ -1,5 +1,5 @@
 minetest.register_alias("mapgen_leaves", "default:leaveblock")
-minetest.register_alias("mapgen_apple", "default:air")
+minetest.register_alias("mapgen_apple", "default:leaveblock")
 minetest.register_alias("mapgen_stone", "default:block")
 minetest.register_alias("mapgen_tree", "default:woodblock")
 minetest.register_alias("mapgen_water_source", "default:block")
