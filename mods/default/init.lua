@@ -1,6 +1,9 @@
 LIGHT_MAX = 14
 
 default = {}
+shootsr = 3
+shoothg = 10
+timersr = 0
 
 dofile(minetest.get_modpath("default").."/mapgen.lua")
 
@@ -18,8 +21,8 @@ BULLET_GRAVETY=1
 default_shoot_bullet=function (item, player, pointed_thing)
         -- Check if blocks in Inventory and remove one of them
         local i=1
-        if player:get_inventory():contains_item("main", "default:block") then
-                player:get_inventory():remove_item("main", "default:block")
+        if player:get_inventory():contains_item("main", "default:hgmunution") then
+                player:get_inventory():remove_item("main", "default:hgmunution")
                 -- Shoot Buller
                 local playerpos=player:getpos()
                 local obj=minetest.env:add_entity({x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, "default:bullet_entity")
@@ -47,7 +50,7 @@ DEFAULT_BULLET_ENTITY.on_step = function(self, dtime)
         local pos = self.object:getpos()
         local node = minetest.env:get_node(pos)
 
-        -- When bullet is away from player (after 0.2 seconds): Cause damage to mobs and players
+        -- When bullet is away from player (after 50 seconds): Cause damage to mobs and players
         if self.timer>50 then
                 local objs = minetest.env:get_objects_inside_radius({x=pos.x,y=pos.y,z=pos.z}, 2)
                 for k, obj in pairs(objs) do
@@ -73,22 +76,31 @@ end
 
 minetest.register_entity("default:bullet_entity", DEFAULT_BULLET_ENTITY)
 
-S_BULLET_DAMAGE=15
+S_BULLET_DAMAGE=100
 S_BULLET_VELOCITY=700
 S_BULLET_GRAVETY=1
 
 default_shoot_s_bullet=function (item, player, pointed_thing)
         -- Check if blocks in Inventory and remove one of them
-        local i=3
-        if player:get_inventory():contains_item("main", "default:s_block") then
-                player:get_inventory():remove_item("main", "default:s_block")
-                -- Shoot S_Bullet
+        local i=1
+        if player:get_inventory():contains_item("main", "default:srmunition") and (shootsr==3 or shootsr==2 or shootsr==1) then
+                --player:get_inventory():remove_item("main", "default:srmunition")
+                shootsr = shootsr - 1
+		-- Shoot S_Bullet
                 local playerpos=player:getpos()
                 local obj=minetest.env:add_entity({x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, "default:s_bullet_entity")
                 local dir=player:get_look_dir()
                 obj:setvelocity({x=dir.x*S_BULLET_VELOCITY, y=dir.y*S_BULLET_VELOCITY, z=dir.z*S_BULLET_VELOCITY})
                 obj:setacceleration({x=dir.x*-3, y=-S_BULLET_GRAVETY, z=dir.z*-3})
+	end
+	if shootsr==0 then 
+		timersr = timersr + 1
+		if timersr==3 then
+			shootsr=3
+			timersr=0
+		end
         end
+
         return
 end
 
@@ -123,14 +135,6 @@ DEFAULT_S_BULLET_ENTITY.on_step = function(self, dtime)
                 end
         end
 
-        -- Become item when hitting a node
-        if self.lastpos.x~=nil then --If there is no lastpos for some reason
-                if node.name ~= "air" then
-                        minetest.env:add_item(self.lastpos, 'craft "default:s_bullet" 1')
-                        self.object:remove()
-                end
-        end
-        self.lastpos={x=pos.x, y=pos.y, z=pos.z} -- Set lastpos-->Item will be added at last pos outside the node
 end
 
 minetest.register_entity("default:s_bullet_entity", DEFAULT_S_BULLET_ENTITY)
@@ -164,7 +168,6 @@ minetest.register_tool("default:machinegun", {
 minetest.register_tool("default:handgun", {
         description = "Handgun",
         inventory_image = "handgun.png",
-	on_use = default_shoot_bullet,
         tool_capabilities = {
                 max_drop_level=0,
         }
@@ -194,6 +197,35 @@ minetest.register_tool("default:pickaxe", {
         }
 })
 
+-- Items
+
+minetest.register_item("default:hgmunition", {
+	type = "none",
+	description = "Handgun Munition",
+	wield_image = "hgmunition.png",
+	wield_scale = {x=1, y=1, z=2,5},
+})
+
+minetest.register_item("default:mgmunition", {
+        type = "none",
+        description = "Machinegun Munition",
+        wield_image = "mgmunition.png",
+        wield_scale = {x=1, y=1, z=2,5},
+})
+
+minetest.register_item("default:srmunition", {
+        type = "none",
+        description = "Sniper Rifle Munition",
+        wield_image = "srmunition.png",
+        wield_scale = {x=1, y=1, z=2,5},
+})
+
+minetest.register_item("default:rocketmunition", {
+        type = "none",
+        description = "Rocketlauncher Munition",
+        wield_image = "rocketmunition.png",
+        wield_scale = {x=1, y=1, z=2,5},
+})
 
 -- Blocks
 
@@ -203,16 +235,6 @@ minetest.register_node("default:block", {
 	is_ground_conect = true,
 	groups = {dig=1},
 	drop = 'default:block',
-
-})
-
-minetest.register_node("default:s_block", {
-        description = "S_Block",
-        tiles ={"s_block.png"},
-        is_ground_conect = true, 
-        groups = {dig=1},
-        drop = 'default:s_block',
-
 })
 
 minetest.register_node("default:leaveblock", {
@@ -223,6 +245,7 @@ minetest.register_node("default:leaveblock", {
         drop = 'default:block',
 
 })
+
 minetest.register_node("default:woodblock", {
         description = "Wood-Block",
         tiles ={"woodblock.png"},
@@ -231,19 +254,6 @@ minetest.register_node("default:woodblock", {
         drop = 'default:block',
 
 })
-
---Craft S_Block
-
-minetest.register_craft({
-        output = 'craft "default:s_block" 1',
-        recipe = {
-                {"default:block"},
-                {"default:block"},
-		{"default:block"},
-	}  
-})
-
-
 
 -- Aliases for the map generator outputs
 
