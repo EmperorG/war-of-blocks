@@ -2,8 +2,9 @@ LIGHT_MAX = 14
 
 default = {}
 shootsr = 3
-shoothg = 10
+shoothg = 5
 timersr = 0
+timerhg = 0
 
 dofile(minetest.get_modpath("default").."/mapgen.lua")
 
@@ -20,16 +21,24 @@ BULLET_GRAVETY=1
 
 default_shoot_bullet=function (item, player, pointed_thing)
         -- Check if blocks in Inventory and remove one of them
-        local i=1
-        if player:get_inventory():contains_item("main", "default:hgmunution") then
-                player:get_inventory():remove_item("main", "default:hgmunution")
+        local i=1							    --and
+        if player:get_inventory():contains_item("main", "default:hgmunution") or (shoothg == 1 or shoothg == 2 or shoothg == 3 or shoothg == 4 or shoothg == 5) then
+                --player:get_inventory():remove_item("main", "default:hgmunution")
                 -- Shoot Buller
-                local playerpos=player:getpos()
+		shoothg = shoothg - 1                
+		local playerpos=player:getpos()
                 local obj=minetest.env:add_entity({x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, "default:bullet_entity")
                 local dir=player:get_look_dir()
                 obj:setvelocity({x=dir.x*BULLET_VELOCITY, y=dir.y*BULLET_VELOCITY, z=dir.z*BULLET_VELOCITY})
                 obj:setacceleration({x=dir.x*-3, y=-BULLET_GRAVETY, z=dir.z*-3})
-        end
+	end
+        if shoothg==0 then 
+		timerhg = timerhg + 1
+		if timerhg==3 then
+			shoothg=5
+			timerhg=0
+		end
+	end
         return
 end
 
@@ -82,8 +91,8 @@ S_BULLET_GRAVETY=1
 
 default_shoot_s_bullet=function (item, player, pointed_thing)
         -- Check if blocks in Inventory and remove one of them
-        local i=1
-        if player:get_inventory():contains_item("main", "default:srmunition") and (shootsr==3 or shootsr==2 or shootsr==1) then
+        local i=1							    --and
+        if player:get_inventory():contains_item("main", "default:srmunition") or (shootsr==3 or shootsr==2 or shootsr==1) then
                 --player:get_inventory():remove_item("main", "default:srmunition")
                 shootsr = shootsr - 1
 		-- Shoot S_Bullet
@@ -95,12 +104,11 @@ default_shoot_s_bullet=function (item, player, pointed_thing)
 	end
 	if shootsr==0 then 
 		timersr = timersr + 1
-		if timersr==3 then
+		if timersr==4 then
 			shootsr=3
 			timersr=0
 		end
         end
-
         return
 end
 
@@ -168,6 +176,7 @@ minetest.register_tool("default:machinegun", {
 minetest.register_tool("default:handgun", {
         description = "Handgun",
         inventory_image = "handgun.png",
+	on_use = default_shoot_bullet,
         tool_capabilities = {
                 max_drop_level=0,
         }
