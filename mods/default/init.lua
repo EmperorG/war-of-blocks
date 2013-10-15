@@ -21,9 +21,9 @@ BULLET_GRAVETY=1
 
 default_shoot_bullet=function (item, player, pointed_thing)
         -- Check if blocks in Inventory and remove one of them
-        local i=1							    --and
-        if player:get_inventory():contains_item("main", "default:hgmunution") or (shoothg == 1 or shoothg == 2 or shoothg == 3 or shoothg == 4 or shoothg == 5) then
-                --player:get_inventory():remove_item("main", "default:hgmunution")
+        local i=1							    
+        if player:get_inventory():contains_item("main", "default:hgmunition") and (shoothg == 1 or shoothg == 2 or shoothg == 3 or shoothg == 4 or shoothg == 5) then
+                player:get_inventory():remove_item("main", "default:hgmunition")
                 -- Shoot Buller
 		shoothg = shoothg - 1                
 		local playerpos=player:getpos()
@@ -72,15 +72,6 @@ DEFAULT_BULLET_ENTITY.on_step = function(self, dtime)
                         end
                 end
         end
-
-        -- Become item when hitting a node
-        if self.lastpos.x~=nil then --If there is no lastpos for some reason
-                if node.name ~= "air" then
-                        minetest.env:add_item(self.lastpos, 'craft "default:bullet" 1')
-                        self.object:remove()
-                end
-        end
-        self.lastpos={x=pos.x, y=pos.y, z=pos.z} -- Set lastpos-->Item will be added at last pos outside the node
 end
 
 minetest.register_entity("default:bullet_entity", DEFAULT_BULLET_ENTITY)
@@ -91,9 +82,9 @@ S_BULLET_GRAVETY=1
 
 default_shoot_s_bullet=function (item, player, pointed_thing)
         -- Check if blocks in Inventory and remove one of them
-        local i=1							    --and
-        if player:get_inventory():contains_item("main", "default:srmunition") or (shootsr==3 or shootsr==2 or shootsr==1) then
-                --player:get_inventory():remove_item("main", "default:srmunition")
+        local i=1							    
+        if player:get_inventory():contains_item("main", "default:srmunition") and (shootsr==3 or shootsr==2 or shootsr==1) then
+                player:get_inventory():remove_item("main", "default:srmunition")
                 shootsr = shootsr - 1
 		-- Shoot S_Bullet
                 local playerpos=player:getpos()
