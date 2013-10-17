@@ -1,8 +1,10 @@
 LIGHT_MAX = 14
 
 default = {}
-shootsr = 3
+shootsr = 1
 shoothg = 5
+shootmg = 100
+timermg = 0
 timersr = 0
 timerhg = 0
 
@@ -22,7 +24,7 @@ BULLET_GRAVETY=1
 default_shoot_bullet=function (item, player, pointed_thing)
         -- Check if blocks in Inventory and remove one of them
         local i=1							    
-        if player:get_inventory():contains_item("main", "default:hgmunition") and (shoothg == 1 or shoothg == 2 or shoothg == 3 or shoothg == 4 or shoothg == 5) then
+        if player:get_inventory():contains_item("main", "default:hgmunition") and shoothg<=5 and shoothg>0 then
                 player:get_inventory():remove_item("main", "default:hgmunition")
                 -- Shoot Buller
 		shoothg = shoothg - 1                
@@ -76,6 +78,67 @@ end
 
 minetest.register_entity("default:bullet_entity", DEFAULT_BULLET_ENTITY)
 
+M_BULLET_DAMAGE=1
+M_BULLET_VELOCITY=550
+M_BULLET_GRAVETY=1
+
+default_m_shoot_bullet=function (item, player, pointed_thing)
+        -- Check if blocks in Inventory and remove one of them
+        local i=1							    
+        while player:get_inventory():contains_item("main", "default:mgmunition") and shootmg<=100 and shootmg>0 do
+		player:get_inventory():remove_item("main", "default:mgmunition")
+                -- Shoot Buller
+		shootmg = shootmg - 1                
+		local playerpos=player:getpos()
+                local obj=minetest.env:add_entity({x=playerpos.x,y=playerpos.y+1.5,z=playerpos.z}, "default:bullet_entity")
+                local dir=player:get_look_dir()
+                obj:setvelocity({x=dir.x*M_BULLET_VELOCITY, y=dir.y*M_BULLET_VELOCITY, z=dir.z*M_BULLET_VELOCITY})
+                obj:setacceleration({x=dir.x*-3, y=-M_BULLET_GRAVETY, z=dir.z*-3})
+	end
+        if shootmg==0 then 
+		timermg = timermg + 1
+		if timermg==3 then
+			shoothg=100
+			timerhg=0
+		end
+	end
+        return
+end
+
+-- The Bullet Entity
+
+DEFAULT_M_BULLET_ENTITY={
+        physical = false,
+        timer=0,
+        textures = {"bullet.png"},
+        lastpos={},
+        collisionbox = {0,0,0,0,0,0},
+}
+
+
+-- Bullet_entity.on_step()--> called when bullet is moving
+DEFAULT_M_BULLET_ENTITY.on_step = function(self, dtime)
+        self.timer=self.timer+dtime
+        local pos = self.object:getpos()
+        local node = minetest.env:get_node(pos)
+
+        -- When bullet is away from player (after 50 seconds): Cause damage to mobs and players
+        if self.timer>50 then
+                local objs = minetest.env:get_objects_inside_radius({x=pos.x,y=pos.y,z=pos.z}, 2)
+                for k, obj in pairs(objs) do
+                        obj:set_hp(obj:get_hp()-M_BULLET_DAMAGE)
+                        if obj:get_entity_name() ~= "default:m_bullet_entity" then
+                                if obj:get_hp()<=0 then
+                                        obj:remove()
+                                end
+                                self.object:remove()
+                        end
+                end
+        end
+end
+
+minetest.register_entity("default:bullet_entity", DEFAULT_BULLET_ENTITY)
+
 S_BULLET_DAMAGE=100
 S_BULLET_VELOCITY=700
 S_BULLET_GRAVETY=1
@@ -83,7 +146,7 @@ S_BULLET_GRAVETY=1
 default_shoot_s_bullet=function (item, player, pointed_thing)
         -- Check if blocks in Inventory and remove one of them
         local i=1							    
-        if player:get_inventory():contains_item("main", "default:srmunition") and (shootsr==3 or shootsr==2 or shootsr==1) then
+        if player:get_inventory():contains_item("main", "default:srmunition") and shootsr==1 then
                 player:get_inventory():remove_item("main", "default:srmunition")
                 shootsr = shootsr - 1
 		-- Shoot S_Bullet
@@ -96,7 +159,7 @@ default_shoot_s_bullet=function (item, player, pointed_thing)
 	if shootsr==0 then 
 		timersr = timersr + 1
 		if timersr==4 then
-			shootsr=3
+			shootsr=1
 			timersr=0
 		end
         end
@@ -157,6 +220,7 @@ minetest.register_tool("default:sniper_rifle", {
 minetest.register_tool("default:machinegun", {
         description = "Machinegun",
         inventory_image = "machinegun.png",
+  	on_use = default_m_shoot_bullet,
         tool_capabilities = {
                 max_drop_level=0,
         }
