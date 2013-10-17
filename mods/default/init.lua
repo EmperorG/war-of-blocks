@@ -8,6 +8,14 @@ timermg = 0
 timersr = 0
 timerhg = 0
 
+function delay(s)
+	local y = 0
+	while y<=s*1000 do
+ 		y=y+1
+	print("h")
+	end
+end
+
 dofile(minetest.get_modpath("default").."/mapgen.lua")
 
 minetest.register_on_joinplayer(function(player)
@@ -94,6 +102,8 @@ default_m_shoot_bullet=function (item, player, pointed_thing)
                 local dir=player:get_look_dir()
                 obj:setvelocity({x=dir.x*M_BULLET_VELOCITY, y=dir.y*M_BULLET_VELOCITY, z=dir.z*M_BULLET_VELOCITY})
                 obj:setacceleration({x=dir.x*-3, y=-M_BULLET_GRAVETY, z=dir.z*-3})
+		delay(10000)
+		print("y")
 	end
         if shootmg==0 then 
 		timermg = timermg + 1
@@ -105,7 +115,7 @@ default_m_shoot_bullet=function (item, player, pointed_thing)
         return
 end
 
--- The Bullet Entity
+-- The M_Bullet Entity
 
 DEFAULT_M_BULLET_ENTITY={
         physical = false,
